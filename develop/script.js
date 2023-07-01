@@ -2,11 +2,11 @@
 // const url = `https://api.openweathermap.org/data/2.5/forecast?lat=(-90;90)&lon=(180;180)&appid=${apiKey}`
 const searchBtn = document.getElementById('searchBtn')
 const apiKey = '47c143e4a6448512a9430d23e2d5f159';
-
+// let city = ''
 
 function FetchWeather(event) {
     event.preventDefault();
-    let city = document.getElementById('city');
+    //city = document.getElementById('city');
     const GeoLocationUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city.value}&limit=1&appid=${apiKey}`;
   
     console.log(city.value);
@@ -27,31 +27,43 @@ function FetchWeather(event) {
         fetch(weatherUrl)
           .then(response => response.json())
           .then(data => {
-            console.log(data.main);
-            console.log(data.weather);
+            console.log(data);
+            // console.log(data.weather);
   
             // Here, you can access the weather data from the 'data' object
             // and perform any necessary operations with it.
             // display the weather data on the page from the API
+            let cityEl = document.getElementById('city-str');
+            cityEl.text = city;
             const weather = document.getElementById('weather');
-            const temperatures = [];
-            const weatherData = [];
-            weatherData.push(data.name);
-            weatherData.push(data.weather[0]);
-            temperatures.push(data.main.temp);
-            temperatures.push(data.main.temp_min);
-            temperatures.push(data.main.temp_max);
-            temperatures.push(data.main.feels_like);
-            weatherData.push(data.weather[0]);
-  
-            for (let i = 0; i < temperatures.length; i++) {
-              temperatures[i] = Math.round(temperatures[i]);
-            }
-  
+
+            const cityName = data.name
+            const temp = data.list[0].main.temp
+            const tempMin = data.list[0].main.temp_min
+            const tempMax = data.list[0].main.temp_max
+            const tempFeelLike = data.list[0].main.feels_like
+          
             console.log(data);
-            console.log(temperatures);
+            console.log(temp);
   
             weather.innerHTML += `
+              <div class="card shadow-0 border">
+                <div class="card-body p-4">
+                  <h4 class="mb-1 sfw-normal">${cityName}</h4>
+                  <p class="mb-2">Current temperature: <strong>${temp}°F</strong></p>
+                  <p>Feels like: <strong>${tempFeelLike}°F</strong></p>
+                  <p>Max: <strong>${tempMax}</strong>, Min: <strong>${tempMin}°F</strong></p>
+        
+                  <div class="d-flex flex-row align-items-center">
+                    <p class="mb-0 me-4">Scattered Clouds</p>
+                    <i class="fas fa-cloud fa-3x" style="color: #eee;"></i>
+                  </div>
+                </div>
+              </div>
+            `;
+
+            let day1 = document.getElementById('day1')
+            day1.innerHTML += `
               <div class="card shadow-0 border">
                 <div class="card-body p-4">
                   <h4 class="mb-1 sfw-normal">${weatherData[0]}</h4>
