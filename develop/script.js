@@ -37,22 +37,47 @@ function FetchWeather(event) {
             cityEl.text = city;
             const weather = document.getElementById('weather');
 
-            const cityName = data.name
-            const temp = data.list[0].main.temp
-            const tempMin = data.list[0].main.temp_min
-            const tempMax = data.list[0].main.temp_max
-            const tempFeelLike = data.list[0].main.feels_like
-          
-            console.log(data);
-            console.log(temp);
-  
+            const cityName = data.city.name 
+            const dayTemp = data.list[0].main.temp
+            const dayTempMin = data.list[0].main.temp_min
+            const dayTempMax = data.list[0].main.temp_max
+            const dayTempFeelLike = data.list[0].main.feels_like
+
             weather.innerHTML += `
+            <div class="card shadow-0 d-flex w-100">
+              <div class="card-body p-4">
+                <h4 class="mb-1 sfw-normal">${cityName}</h4>
+                <p class="mb-2">Current temperature: <strong>${dayTemp}°F</strong></p>
+                <p>Feels like: <strong>${dayTempFeelLike}°F</strong></p>
+                <p>Max: <strong>${dayTempMax}</strong>, Min: <strong>${dayTempMin}°F</strong></p>
+      
+                <div class="d-flex flex-row align-items-center">
+                  <p class="mb-0 me-4">Scattered Clouds</p>
+                  <i class="fas fa-cloud fa-3x" style="color: #eee;"></i>
+                </div>
+              </div>
+            </div>
+          `;
+                 const indices = [0, 7, 15, 23, 31];
+            // Loop through the specified indices to fetch the desired days' data
+              for (let i = 0; i < indices.length; i++) {
+                 const currentIndex = indices[i];
+                 const temp = data.list[currentIndex].main.temp;
+                 const tempMin = data.list[currentIndex].main.temp_min;
+                 const tempMax = data.list[currentIndex].main.temp_max;
+                 const tempFeelLike = data.list[currentIndex].main.feels_like;
+                console.log(data);
+              
+          
+
+            let day1 = document.getElementById(`day${i+1}`)
+            day1.innerHTML += `
               <div class="card shadow-0 border">
                 <div class="card-body p-4">
                   <h4 class="mb-1 sfw-normal">${cityName}</h4>
                   <p class="mb-2">Current temperature: <strong>${temp}°F</strong></p>
                   <p>Feels like: <strong>${tempFeelLike}°F</strong></p>
-                  <p>Max: <strong>${tempMax}</strong>, Min: <strong>${tempMin}°F</strong></p>
+                  <p>Max: <strong>${tempMax}°F</strong>, Min: <strong>${tempMin}°F</strong></p>
         
                   <div class="d-flex flex-row align-items-center">
                     <p class="mb-0 me-4">Scattered Clouds</p>
@@ -61,23 +86,7 @@ function FetchWeather(event) {
                 </div>
               </div>
             `;
-
-            let day1 = document.getElementById('day1')
-            day1.innerHTML += `
-              <div class="card shadow-0 border">
-                <div class="card-body p-4">
-                  <h4 class="mb-1 sfw-normal">${weatherData[0]}</h4>
-                  <p class="mb-2">Current temperature: <strong>${temperatures[0]}°F</strong></p>
-                  <p>Feels like: <strong>${temperatures[3]}°F</strong></p>
-                  <p>Max: <strong>${temperatures[1]}°F</strong>, Min: <strong>${temperatures[2]}°F</strong></p>
-        
-                  <div class="d-flex flex-row align-items-center">
-                    <p class="mb-0 me-4">Scattered Clouds</p>
-                    <i class="fas fa-cloud fa-3x" style="color: #eee;"></i>
-                  </div>
-                </div>
-              </div>
-            `;
+              }
           })
           .catch(error => {
             console.log('Error:', error);
