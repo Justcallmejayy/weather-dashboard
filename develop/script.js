@@ -99,5 +99,19 @@ function FetchWeather(event) {
     city.value = '';
   }
 
+  function clearWeather () {
+    for (let i= 1; i < 6; i++) {
+      let weatherBoxes = document.getElementById(`day${i}`);
+      let weather = document.getElementById('weather')
+      if (weatherBoxes.hasChildNodes()) {
+        while (weatherBoxes.firstChild) {
+           weatherBoxes.removeChild(weatherBoxes.firstChild);
+           weather.removeChild(weather.firstChild)
+      }
+    }
+      console.log(weatherBoxes)
+    }
+  }
+
 searchBtn.addEventListener('click', FetchWeather)
 
