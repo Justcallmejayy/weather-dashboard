@@ -5,7 +5,8 @@ const apiKey = '47c143e4a6448512a9430d23e2d5f159';
 // let city = ''
 
 function FetchWeather(event) {
-    event.preventDefault();
+
+    clearWeather()
     //city = document.getElementById('city');
     const GeoLocationUrl = `http://api.openweathermap.org/geo/1.0/direct?q=${city.value}&limit=1&appid=${apiKey}`;
   
@@ -34,7 +35,7 @@ function FetchWeather(event) {
             // and perform any necessary operations with it.
             // display the weather data on the page from the API
             let cityEl = document.getElementById('city-str');
-            cityEl.text = city;
+            //cityEl.text = city;
             const weather = document.getElementById('weather');
 
             const cityName = data.city.name 
@@ -99,19 +100,56 @@ function FetchWeather(event) {
     city.value = '';
   }
 
-  function clearWeather () {
-    for (let i= 1; i < 6; i++) {
+  function clearWeather() {
+    for (let i = 1; i < 6; i++) {
       let weatherBoxes = document.getElementById(`day${i}`);
-      let weather = document.getElementById('weather')
-      if (weatherBoxes.hasChildNodes()) {
+      if (weatherBoxes) {
         while (weatherBoxes.firstChild) {
-           weatherBoxes.removeChild(weatherBoxes.firstChild);
-           weather.removeChild(weather.firstChild)
+          weatherBoxes.firstChild.remove();
+        }
       }
     }
-      console.log(weatherBoxes)
-    }
+  
+    let weather = document.getElementById('weather');
+    weather.innerHTML = '';
   }
 
-searchBtn.addEventListener('click', FetchWeather)
+  function saveCityToLocalStorage(city) {
+    // get existing data from local storage
+   let cities = localStorage.getItem('cities')
+   cities = cities ? JSON.parse(cities) : []
+   //Add new city to the list
+   cities.push(city)
+   //store the update list back to local storage
+   localStorage.setItem('cities', JSON.stringify(cities))
+  }
 
+  searchBtn.addEventListener('click', function(event) {
+    event.preventDefault();
+    FetchWeather(event);
+    saveCityToLocalStorage(city.value);
+  });
+
+
+
+function displayRecentlyViewed() {
+  let cities = localStorage.getItem('cities')
+  cities = cities ? JSON.parse(cities) : []
+
+  //Display cities on the forcast dashboard
+  const recentlyViewedCitiesEl = document.getElementById('recent-search')
+  recentlyViewedCitiesEl.innerHTML = ''
+
+  cities.forEach(city => {
+    const cityElement = document.createElement('div')
+    cityElement.textContent = city
+    cityElement.classList.add('recent-city')
+    city.element.addEventListener('click', function(){
+
+      city.value = city
+      FetchWeather()
+    })
+    recentlyViewedCitiesEl.appendChild(cityElement)
+  })
+}
+displayRecentlyViewed();
