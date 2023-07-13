@@ -116,6 +116,7 @@ function FetchWeather(event) {
 
   function saveCityToLocalStorage(city) {
     // get existing data from local storage
+    console.log(city)
    let cities = localStorage.getItem('cities')
    cities = cities ? JSON.parse(cities) : []
    //Add new city to the list
@@ -126,8 +127,9 @@ function FetchWeather(event) {
 
   searchBtn.addEventListener('click', function(event) {
     event.preventDefault();
-    FetchWeather(event);
+    console.log(city.value)
     saveCityToLocalStorage(city.value);
+    FetchWeather(event);
   });
 
 
@@ -140,13 +142,13 @@ function displayRecentlyViewed() {
   const recentlyViewedCitiesEl = document.getElementById('recent-search')
   recentlyViewedCitiesEl.innerHTML = ''
 
-  cities.forEach(city => {
+  cities.forEach(cityName => {
     const cityElement = document.createElement('div')
-    cityElement.textContent = city
+    cityElement.textContent = cityName
     cityElement.classList.add('recent-city')
-    city.element.addEventListener('click', function(){
-
-      city.value = city
+    cityElement.addEventListener('click', function(){
+      console.log('hello')
+      city.value = cityName
       FetchWeather()
     })
     recentlyViewedCitiesEl.appendChild(cityElement)
